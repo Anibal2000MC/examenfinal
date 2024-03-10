@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Registro de Curso</title>
+	<!-- Agregar la referencia a los archivos CSS de Bootstrap (localmente o a través de CDN) -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+
+	<div class="container mt-5">
+		<h1 class="mt-5">Registro de Producto</h1>
+		<form action="/biblioteca/crear" method="post">
+			<div class="form-group">
+				<label for="nombreCurso">Nombre del Libro</label>
+				<input type="text" class="form-control" id="nombre" name="nombre"
+					placeholder="Ingrese el nombre del libro" required>
+			</div>
+			<div class="form-group">
+				<label for="descripcionCurso">Autor</label>
+				<input type="text" class="form-control" id="autor" name="autor" placeholder="Ingrese el autor del libro"
+					required>
+			</div>
+			<div class="form-group">
+				<label for="descripcionCurso">Fecha de Publicación</label>
+				<input type="date" class="form-control" id="fechaPublicacion" name="fechaPublicacion" required>
+			</div>
+			<div class="form-group">
+				<label for="descripcionCurso">Género</label>
+				<select type="text" class="form-control" id="idGenero" name="idGenero"required>
+					<option>Seleccione</option>
+					<option th:each="genero: ${generos}" th:value="${genero.id}" th:text="${genero.nombre}"></option>
+				</select>>
+			</div>
+			<button type="submit" class="btn btn-primary">Registrar Libro</button>
+		</form>
+	</div>
+
+	<!-- Agregar la referencia a los archivos JavaScript de Bootstrap (localmente o a través de CDN) -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

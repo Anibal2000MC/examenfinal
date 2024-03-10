@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Insert title here</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="#">Mi Aplicación</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+			aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item active">
+					<a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/biblioteca/Libros">Libros</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/biblioteca/reporte/libros-ultimos-seis-meses-por-genero">Reportes</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<div class="container mt-5">
+		<h1 class="mt-5">Reporte de citas</h1>
+		<div class="row mb-3">
+			<div class="col-md-12">
+				<form action="/biblioteca/crear" method="get" class="float-right">
+					<button type="submit" class="btn btn-secondary">Nuevo</button>
+				</form>
+				
+			</div>
+		</div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">Id del Libro</th>
+					<th scope="col">Libro</th>
+					<th scope="col">Autor</th>
+					<th scope="col">Fecha de Publicación</th>
+					<th scope="col">Género</th>
+					<th scope="col">Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- Iterar sobre la lista de citas y mostrar cada una -->
+				<tr th:each="libro : ${libros}">
+					<td th:text="${libro.id}"></td>
+					<td th:text="${libro.nombre}"></td>
+					<td th:text="${libro.autor}"></td>
+					<td th:text="${libro.fechaPublicacion}"></td>
+					<td th:text="${libro.genero.nombre}"></td>
+					<td><a th:href="@{'/biblioteca/edit/' +${libro.id}}" class="btn btn-warning">Editar</a>
+					<a th:href="@{'/biblioteca/delete/' + ${libro.id}}"
+							onclick="return confirm('¿Está seguro de eliminar?');" class="btn btn-danger">Eliminar</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="card text-center">
+		<div class="card-header">Footer</div>
+		<div class="card-body">
+			<h5 class="card-title">Examen Final</h5>
+			<p class="card-text">Creado y soportado por AMC</p>
+
+		</div>
+	</div>
+</body>
+</html>

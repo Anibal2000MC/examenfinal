@@ -32,6 +32,7 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 import com.example.proyecto.service.GeneroService;
 import com.example.proyecto.model.Libro;
+import com.example.proyecto.model.Reporte;
 import com.example.proyecto.model.Genero;
 
 @Controller
@@ -124,17 +125,49 @@ public class LibrosController {
 		model.addAttribute("generos", generoService.getAllGeneros());
 		return "listLibros";
 	}
-	
-	
-	
+
 	@GetMapping("/reporte/libros-ultimos-seis-meses-por-genero")
 	public String mostrarReportePorGenero(Model model) {
-		
-	    List<Object[]> resultados = libroService.contarLibrosUltimosSeisMesesPorGenero();
-	    model.addAttribute("resultados", resultados);
-	    
-	    return "reporte";
+
+		List<Object[]> resultados = libroService.contarLibrosUltimosSeisMesesPorGenero();
+		model.addAttribute("resultados", resultados);
+
+		return "reporte";
 	}
-	
+
+	@GetMapping("/reporte")
+	public void report(HttpServletResponse response, Model model) throws JRException, IOException {
+
+		// 1. Acceder al reporte
+		InputStream jasperStream = this.getClass().getResourceAsStream("/reportes/reporte.jasper");
+
+		// 2. Preparadar los datos
+		Map<String, Object> params = new HashMap<>();
+		params.put("usuario", "Jorge Ventura");
+
+		List<Object[]> resultados = libroService.contarLibrosUltimosSeisMesesPorGenero();
+		List<Reporte> listaReporte = new ArrayList<>();
+		
+		for (Object[] resultado : resultados) {
+		    Reporte reporte = new Reporte();
+		    reporte.setNombreGenero((String) resultado[0]);
+		    reporte.setCantidadLibros((Long) resultado[1]);
+		    listaReporte.add(reporte);
+		}
+		model.addAttribute("reportes", listaReporte);
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(listaReporte);
+
+		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, dataSource);
+
+		// 3. Configuracion
+
+		response.setContentType("aplication/x-pdf");
+		response.setHeader("Content-disposition", "filename=reporte.pdf");
+
+		// 4. Exportar reporte
+		final OutputStream outputStream = response.getOutputStream();
+		JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+	}
 
 }
